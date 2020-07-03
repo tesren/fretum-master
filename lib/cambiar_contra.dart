@@ -1,13 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class CambiarNombre extends StatefulWidget {
+class CambiarContra extends StatefulWidget {
   @override
-  _CambiarNombreState createState() => _CambiarNombreState();
+  _CambiarContraState createState() => _CambiarContraState();
 }
 
-class _CambiarNombreState extends State<CambiarNombre> {
+class _CambiarContraState extends State<CambiarContra> {
+
   Color _colorCubo = Colors.transparent;
 
   @override
@@ -29,7 +31,7 @@ class _CambiarNombreState extends State<CambiarNombre> {
                   height: 32,
                 ),
               ),
-              Text("Cambiar nombre",
+              Text("Cambiar contraseña",
                   style: estiloBlanco),
             ],
           ),
@@ -40,26 +42,50 @@ class _CambiarNombreState extends State<CambiarNombre> {
             onPressed: () => Navigator.pushReplacementNamed(context, '/perfil'),
           ),
         ),
+
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(25.0, 20.0, 25.0, 0.0),
+            padding: const EdgeInsets.fromLTRB(25.0,15.0,25.0, 20.0),
             child: Column(
               children: <Widget>[
                 TextField(
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.account_circle),
+                    prefixIcon: Icon(Icons.lock),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    //icon: Icon(Icons.shopping_basket, color: Colors.grey),
-                    //hintText: "Nombre",
-                    labelText: "Nombre",
+                    labelText: "Contraseña actual",
+                  ),
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                ),
+                SizedBox(height: 15.0),
+                TextField(
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.lock_outline),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    labelText: "Contraseña nueva",
+                  ),
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                ),
+                SizedBox(height: 15.0),
+                TextField(
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.lock_outline),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    labelText: "Confirmar contraseña",
                   ),
                 ),
                 SizedBox(height: 15.0),
                 Container(
-                  width: double.infinity,
-                  height: 55.0,
+                  width: double.infinity, height: 55,
                   child: RaisedButton(
+                    elevation: 4.0,
                     color: azulFretum,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)
@@ -81,7 +107,6 @@ class _CambiarNombreState extends State<CambiarNombre> {
             ),
           ),
         ),
-
       ),
     );
   }

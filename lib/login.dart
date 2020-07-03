@@ -12,7 +12,7 @@ class _LoginState extends State<Login> {
 
   Map data = {};
   bool checkBoxValue = true;
-  Color colorCubo = Colors.transparent;
+  Color _colorCubo = Colors.transparent;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
           child: Center(
             child: Column(
               children: <Widget>[
-                SizedBox(height: 15),
+                SizedBox(height: 10),
                 Image(image: AssetImage("assets/ic_launcher_round.png"),
                   fit: BoxFit.contain,
                   height: 75.0,
@@ -50,14 +50,14 @@ class _LoginState extends State<Login> {
                     margin: const EdgeInsets.fromLTRB(40.0,5.0,40.0,3.0),
                     child: Image(image: AssetImage("assets/titulo.png"))),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(40.0, 40.0, 40.0, 30.0),
+                  margin: const EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 30.0),
                   child: Column(
                     children: <Widget>[
                       TextField(
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          icon: Icon(Icons.email, color: Colors.grey),
-                          hintText: "ejemplo@mail.com",
+                          prefixIcon: Icon(Icons.email, color: Colors.grey),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           labelText: "Correo electrónico"
                         ),
                         textInputAction: TextInputAction.next,
@@ -68,8 +68,8 @@ class _LoginState extends State<Login> {
                         obscureText: true,
                         keyboardType: TextInputType.visiblePassword ,
                         decoration: InputDecoration(
-                          icon: Icon(Icons.lock, color: Colors.grey),
-                          hintText: "Contraseña",
+                          prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           labelText: "Contraseña",
                         ),
                       ),
@@ -89,13 +89,13 @@ class _LoginState extends State<Login> {
                       ),
                       SizedBox(height: 30.0),
                       Container(
-                        width: 300.0,
-                        height: 45.0,
+                        width: double.infinity,
+                        height: 50.0,
                         child: RaisedButton(
                           onPressed: (){
                             Navigator.pushReplacementNamed(context, '/citas');
                             setState(() {
-                              colorCubo = azulFretum;
+                              _colorCubo = azulFretum;
                             });
                           },
                           child: Text("Iniciar sesión",
@@ -121,7 +121,7 @@ class _LoginState extends State<Login> {
                         )),
                       ),
                       SpinKitFadingCube(
-                        color: colorCubo,
+                        color: _colorCubo,
                         size: 40.0,
                       )
                     ],

@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class CambiarNombre extends StatefulWidget {
+class CambiarApellidos extends StatefulWidget {
   @override
-  _CambiarNombreState createState() => _CambiarNombreState();
+  _CambiarApellidosState createState() => _CambiarApellidosState();
 }
 
-class _CambiarNombreState extends State<CambiarNombre> {
+class _CambiarApellidosState extends State<CambiarApellidos> {
   Color _colorCubo = Colors.transparent;
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: ()async{
         Navigator.pushReplacementNamed(context, '/perfil');
         return false;
       },
@@ -29,7 +29,7 @@ class _CambiarNombreState extends State<CambiarNombre> {
                   height: 32,
                 ),
               ),
-              Text("Cambiar nombre",
+              Text("Cambiar apellidos",
                   style: estiloBlanco),
             ],
           ),
@@ -48,11 +48,11 @@ class _CambiarNombreState extends State<CambiarNombre> {
                 TextField(
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.account_circle),
+                    prefixIcon: Icon(Icons.font_download),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     //icon: Icon(Icons.shopping_basket, color: Colors.grey),
                     //hintText: "Nombre",
-                    labelText: "Nombre",
+                    labelText: "Apellidos",
                   ),
                 ),
                 SizedBox(height: 15.0),
@@ -81,7 +81,6 @@ class _CambiarNombreState extends State<CambiarNombre> {
             ),
           ),
         ),
-
       ),
     );
   }
