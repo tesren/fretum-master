@@ -16,6 +16,7 @@ import 'cambiar_nombre.dart';
 import 'cambiar_apellidos.dart';
 import 'reportar.dart';
 import 'terminos.dart';
+import 'agregar_carros.dart';
 
 void main() => runApp(MaterialApp(
     initialRoute: '/',
@@ -37,6 +38,7 @@ void main() => runApp(MaterialApp(
       '/cambiarContra': (context) => CambiarContra(),
       '/reportar': (context) => Reportar(),
       '/terminos': (context) => Terminos(),
+          '/agregarCarros': (context) => AgregarCarros(),
 
     }
 ));

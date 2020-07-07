@@ -99,15 +99,18 @@ class _AgregarGastoState extends State<AgregarGasto> {
                   ),
                   SizedBox(height: 20.0),
                   AddressSearchField(
-                    country: "Mexico",
+                    country: "México",
                     city: "Puerto Vallarta",
                     hintText: "Lugar",
                     noResultsText: "No hay resultados",
                     onDone: (AddressPoint point) async{
-
                       Navigator.pop(context);
-
                     },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        prefixIcon: Icon(Icons.add_location),
+                        labelText: "Lugar"
+                    ),
 
                   ),
                   SizedBox(height: 20.0),
