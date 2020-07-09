@@ -8,6 +8,14 @@ class AgregarCarros extends StatefulWidget {
 }
 
 class _AgregarCarrosState extends State<AgregarCarros> {
+
+  int autoChico = 0;
+  int soloLauto = 0;
+  int camioChica = 0;
+  int soloLcamio = 0;
+  int motos = 0;
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -49,7 +57,7 @@ class _AgregarCarrosState extends State<AgregarCarros> {
                 ],
               ),
               onPressed: (){
-                Navigator.pushReplacementNamed(context, '/');
+                Navigator.pushReplacementNamed(context, '/fechayhora');
               },
             ),
             elevation: 0,
@@ -114,14 +122,22 @@ class _AgregarCarrosState extends State<AgregarCarros> {
                               icon: Icon(Icons.remove),
                               color: azulFretum,
                               onPressed: (){
-
+                                setState(() {
+                                  if(autoChico==0){
+                                  }else{
+                                    autoChico--;
+                                  }
+                                });
                               },
                             ),
-                            Text("0",style: estiloGris),
+                            Text("$autoChico",style: estiloNegro),
                             IconButton(
                               icon: Icon(Icons.add),
                               color: azulFretum,
                               onPressed: (){
+                                setState(() {
+                                  autoChico++;
+                                });
                               },
                             ),
                           ],
@@ -151,14 +167,23 @@ class _AgregarCarrosState extends State<AgregarCarros> {
                                   icon: Icon(Icons.remove),
                                   color: azulFretum,
                                   onPressed: (){
+                                    setState(() {
+                                      if(soloLauto==0){
+                                      }else{
+                                        soloLauto--;
+                                      }
+                                    });
 
                                   },
                                 ),
-                                Text("0",style: estiloGris),
+                                Text("$soloLauto",style: estiloNegro),
                                 IconButton(
                                   icon: Icon(Icons.add),
                                   color: azulFretum,
                                   onPressed: (){
+                                    setState(() {
+                                      soloLauto++;
+                                    });
                                   },
                                 ),
                       ],
@@ -223,14 +248,21 @@ class _AgregarCarrosState extends State<AgregarCarros> {
                               icon: Icon(Icons.remove),
                               color: azulFretum,
                               onPressed: (){
-
+                                setState(() {
+                                  if(camioChica!=0){
+                                    camioChica--;
+                                  }
+                                });
                               },
                             ),
-                            Text("0",style: estiloGris),
+                            Text("$camioChica",style: estiloNegro),
                             IconButton(
                               icon: Icon(Icons.add),
                               color: azulFretum,
                               onPressed: (){
+                                setState(() {
+                                  camioChica++;
+                                });
                               },
                             ),
                           ],
@@ -260,14 +292,22 @@ class _AgregarCarrosState extends State<AgregarCarros> {
                               icon: Icon(Icons.remove),
                               color: azulFretum,
                               onPressed: (){
+                                setState(() {
+                                  if(soloLcamio != 0){
+                                    soloLcamio--;
+                                  }
+                                });
 
                               },
                             ),
-                            Text("0",style: estiloGris),
+                            Text("$soloLcamio",style: estiloNegro),
                             IconButton(
                               icon: Icon(Icons.add),
                               color: azulFretum,
                               onPressed: (){
+                                setState(() {
+                                  soloLcamio++;
+                                });
                               },
                             ),
                           ],
@@ -332,14 +372,21 @@ class _AgregarCarrosState extends State<AgregarCarros> {
                               icon: Icon(Icons.remove),
                               color: azulFretum,
                               onPressed: (){
-
+                                setState(() {
+                                  if(motos != 0){
+                                    motos--;
+                                  }
+                                });
                               },
                             ),
-                            Text("0",style: estiloGris),
+                            Text("$motos",style: estiloNegro),
                             IconButton(
                               icon: Icon(Icons.add),
                               color: azulFretum,
                               onPressed: (){
+                                setState(() {
+                                  motos++;
+                                });
                               },
                             ),
                           ],

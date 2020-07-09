@@ -131,7 +131,12 @@ class _AgregarGastoState extends State<AgregarGasto> {
                        ],
                      ),
                      onPressed: (){
-                       showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2020), lastDate: DateTime(2030,)).then((date){
+                       showDatePicker(
+                           context: context,
+                           locale: Locale('es','MX'),
+                           initialDate: DateTime.now(),
+                           firstDate: DateTime(2020),
+                           lastDate: DateTime(2030,)).then((date){
                          setState(() {
                            _dateTime = date;
                            convertedDate = new DateFormat("yyyy-MM-dd").format(_dateTime);

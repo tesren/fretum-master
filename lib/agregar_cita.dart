@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'colors.dart';
 import 'package:address_search_field/address_search_field.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 
 class Agregar_cita extends StatefulWidget {
   @override
@@ -20,12 +23,23 @@ class _Agregar_citaState extends State<Agregar_cita> {
   TextEditingController controllerAdress = TextEditingController();
   String Adress = "";
   final double hueFretum = 207.1;
-  //Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  LatLng _initialPosition ;
+
 
   @override
   void initState() {
     super.initState();
     _initLocation();
+    _getUserLocation();
+  }
+
+  void _getUserLocation() async {
+    Position position = await Geolocator().getCurrentPosition();
+    List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
+    setState(() {
+      _initialPosition = LatLng(position.latitude, position.longitude);
+      print('${placemark[0].name}');
+    });
   }
 
   _initLocation() async {
@@ -137,12 +151,26 @@ class _Agregar_citaState extends State<Agregar_cita> {
                 ),
               ),
               Expanded(
-                child: GoogleMap(
+                child: _initialPosition == null ? Container(
+                  child: Center(
+                    child:Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Cargando Mapa..', style: estiloGris,),
+                        SizedBox(height: 20),
+                        SpinKitFadingCube(
+                          color: azulFretum,
+                          size: 40,
+                        )
+                      ],
+                    ),),) :
+                GoogleMap(
                   onLongPress: (LatLong){
                     _addMarkerLongPressed(LatLong);
                   },
                   initialCameraPosition: CameraPosition(
-                      target: LatLng(20.639174, -105.221836),
+                      target: _initialPosition,
                       zoom: 16
                   ),
                   zoomGesturesEnabled: true,
