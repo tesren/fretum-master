@@ -22,8 +22,9 @@ class _Agregar_citaState extends State<Agregar_cita> {
   Set<Marker> markers = Set();
   TextEditingController controllerAdress = TextEditingController();
   String Adress = "";
-  final double hueFretum = 207.1;
+  //final double hueFretum = 207.1;
   LatLng _initialPosition ;
+  LatLng posicion;
 
 
   @override
@@ -69,6 +70,7 @@ class _Agregar_citaState extends State<Agregar_cita> {
       },
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Row(
             children: <Widget>[
               Padding(
@@ -90,6 +92,7 @@ class _Agregar_citaState extends State<Agregar_cita> {
             onPressed: () => Navigator.pushReplacementNamed(context, '/citas'),
           ),
         ),
+
         bottomNavigationBar: SizedBox(height: 55, width: double.infinity,
           child: BottomAppBar(
             color: azulFretum,
@@ -103,12 +106,16 @@ class _Agregar_citaState extends State<Agregar_cita> {
                 ],
               ),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/agregarCarros');
+                Navigator.pushReplacementNamed(context, '/agregarCarros', arguments:{
+                  'direccion': Adress,
+                  'latlong': posicion
+                });
               },
             ),
             elevation: 0,
           ),
         ),
+
         body: SafeArea(
           child: Column(
             children: <Widget>[
@@ -120,17 +127,20 @@ class _Agregar_citaState extends State<Agregar_cita> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+
                   child: AddressSearchField(
                     controller: controllerAdress,
                     country: "México",
                     city: "Puerto Vallarta",
                     hintText: "Dirección",
                     noResultsText: "No hay resultados",
+
                     onDone: (AddressPoint point) async{
                       target = LatLng(point.latitude, point.longitude);
                       setState(() {
                         Adress = point.address;
                         controllerAdress.text = Adress;
+                        posicion = LatLng(point.latitude, point.longitude);
 
                         markers = Set();
                         markers.add(Marker(
@@ -198,6 +208,8 @@ class _Agregar_citaState extends State<Agregar_cita> {
       );
       Adress = LatLong.toString().substring(6);
       controllerAdress.text = Adress;
+      posicion = LatLong;
+
     });
     _mapController.animateCamera(CameraUpdate.newLatLng(LatLong));
     //This is optional, it will zoom when the marker has been created

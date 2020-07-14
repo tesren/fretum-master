@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'colors.dart';
 
+
 class AgregarCarros extends StatefulWidget {
   @override
   _AgregarCarrosState createState() => _AgregarCarrosState();
 }
 
 class _AgregarCarrosState extends State<AgregarCarros> {
+
+  Map _datos = {};
 
   int autoChico = 0;
   int soloLauto = 0;
@@ -18,6 +21,10 @@ class _AgregarCarrosState extends State<AgregarCarros> {
 
   @override
   Widget build(BuildContext context) {
+
+    _datos = ModalRoute.of(context).settings.arguments;
+
+
     return WillPopScope(
       onWillPop: () async{
         Navigator.pushReplacementNamed(context, '/agregar_cita');
@@ -57,7 +64,15 @@ class _AgregarCarrosState extends State<AgregarCarros> {
                 ],
               ),
               onPressed: (){
-                Navigator.pushReplacementNamed(context, '/fechayhora');
+                Navigator.pushReplacementNamed(context, '/fechayhora', arguments: {
+                  'direccion': _datos['direccion'],
+                  'latlong' : _datos['latlong'],
+                  'autoChico': autoChico,
+                  'soloLauto': soloLauto,
+                  'camioChica': camioChica,
+                  'soloLcamio': soloLcamio,
+                  'motos': motos
+                });
               },
             ),
             elevation: 0,

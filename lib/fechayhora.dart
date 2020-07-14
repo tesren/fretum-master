@@ -12,15 +12,24 @@ class FechayHora extends StatefulWidget {
 class _FechayHoraState extends State<FechayHora> {
   DateTime _dateTime;
   String convertedDate;
-
+  Map _datos = {};
   TimeOfDay _hora;
 
-  final List<String> Lavadores =['Carlos Maldonado', 'Erick Pérez', 'Luis Monroy', 'Juan Gonzales'];
-  String _currentLavador;
+  final List<String> Lavadores =['Carlos Maldonado', 'Erick Pérez', 'Luis Monroy', 'Juan Gonzalez'];
+  String _currentLavador = 'Carlos Maldonado';
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
 
   @override
   Widget build(BuildContext context) {
+
+    _datos = ModalRoute.of(context).settings.arguments;
+
     return WillPopScope(
       onWillPop: ()async{
         Navigator.pushReplacementNamed(context, '/agregarCarros');
@@ -60,7 +69,18 @@ class _FechayHoraState extends State<FechayHora> {
                 ],
               ),
               onPressed: (){
-                Navigator.pushReplacementNamed(context, '/');
+                Navigator.pushReplacementNamed(context, '/confirmarCita', arguments: {
+                  'direccion': _datos['direccion'],
+                  'latlong' : _datos['latlong'],
+                  'autoChico': _datos['autoChico'],
+                  'soloLauto': _datos['soloLauto'],
+                  'camioChica': _datos['camioChica'],
+                  'soloLcamio': _datos['soloLcamio'],
+                  'motos': _datos['motos'],
+                  'hora': _hora.format(context).toString(),
+                  'fecha': convertedDate,
+                  'lavador': _currentLavador
+                });
               },
             ),
             elevation: 0,

@@ -19,6 +19,7 @@ import 'agregar_carros.dart';
 import 'fechayhora.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app_localizations.dart';
+import 'confirmar_cita.dart';
 
     void main() => runApp(MaterialApp(
 
@@ -44,6 +45,7 @@ import 'app_localizations.dart';
           '/agregarCarros': (context) => AgregarCarros(),
 
           '/fechayhora': (context) => FechayHora(),
+          '/confirmarCita': (context)=> ConfirmarCita(),
         },
 
         supportedLocales: [
