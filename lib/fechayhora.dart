@@ -32,7 +32,10 @@ class _FechayHoraState extends State<FechayHora> {
 
     return WillPopScope(
       onWillPop: ()async{
-        Navigator.pushReplacementNamed(context, '/agregarCarros');
+        Navigator.pushReplacementNamed(context, '/agregarCarros', arguments: {
+          'direccion': _datos['direccion'],
+          'latlong' : _datos['latlong'],
+        });
         return false;
       },
       child: Scaffold(
@@ -55,7 +58,10 @@ class _FechayHoraState extends State<FechayHora> {
           automaticallyImplyLeading: true,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
-            onPressed: () => Navigator.pushReplacementNamed(context, '/agregarCarros'),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/agregarCarros', arguments: {
+              'direccion': _datos['direccion'],
+              'latlong' : _datos['latlong'],
+            }),
           ),
         ),
         bottomNavigationBar: SizedBox( height: 55, width: double.infinity,

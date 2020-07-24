@@ -20,12 +20,29 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
 
     _datos = ModalRoute.of(context).settings.arguments;
 
+   //datos de las pantallas anteriores
     LatLng direccion = _datos['latlong'];
     int autoChico = _datos['autoChico'];
     int soloLauto = _datos['soloLauto'];
     int camioChica = _datos['camioChica'];
     int soloLcamio = _datos['soloLcamio'];
     int motos = _datos['motos'];
+
+    //costos de los servicios
+    int pAutoChico = 99;
+    int pSoloLchico = 69;
+    int pCamioChica = 149;
+    int pSoloLchica = 99;
+    int pMotos = 49;
+
+    //variable para calcular total
+    int total = (pAutoChico * autoChico) + (pSoloLchico * soloLauto) + (pCamioChica * camioChica) + (pSoloLchica * soloLcamio) + (pMotos * motos);
+
+    //variables de tiempo estimado
+    int tiempoAutoC = 1;
+    double tiempoCamioC = 1.5;
+    double tiempoMoto= 0.5;
+    double tiempoEstim = (tiempoAutoC * autoChico) + (tiempoCamioC * camioChica) + (tiempoMoto * motos) + (tiempoMoto * soloLcamio) + (tiempoMoto * soloLauto);
 
     markers = Set();
     markers.add(Marker(
@@ -36,7 +53,15 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
 
     return WillPopScope(
       onWillPop: () async{
-        Navigator.pushReplacementNamed(context, '/fechayhora');
+        Navigator.pushReplacementNamed(context, '/fechayhora', arguments: {
+          'direccion': _datos['direccion'],
+          'latlong' : _datos['latlong'],
+          'autoChico': _datos['autoChico'],
+          'soloLauto': _datos['soloLauto'],
+          'camioChica': _datos['camioChica'],
+          'soloLcamio': _datos['soloLcamio'],
+          'motos': _datos['motos'],
+        });
         return false;
       },
 
@@ -60,7 +85,15 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
           automaticallyImplyLeading: true,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
-            onPressed: () => Navigator.pushReplacementNamed(context, '/fechayhora'),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/fechayhora', arguments: {
+              'direccion': _datos['direccion'],
+              'latlong' : _datos['latlong'],
+              'autoChico': _datos['autoChico'],
+              'soloLauto': _datos['soloLauto'],
+              'camioChica': _datos['camioChica'],
+              'soloLcamio': _datos['soloLcamio'],
+              'motos': _datos['motos'],
+            }),
           ),
         ),
 
@@ -158,7 +191,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                         children: <Widget>[
                           Icon(Icons.timer),
                           SizedBox(width: 5),
-                          Text("Tiempo estimado del lavado: "  ,style: estiloNegro),
+                          Text("Tiempo estimado del lavado: " + tiempoEstim.toString() + " horas",style: estiloNegro),
                       ],
                       )
                     ],
@@ -185,7 +218,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                             Text(autoChico.toString() + "X", style: estiloAzul,),
                             SizedBox(width: 5),
                             Expanded(child: Text("Lavado y aspirado auto chico",style: estiloCarros,)),
-                            Text("   MXN\$", style: estiloCarros,)
+                            Text("MXN\$" + (autoChico * pAutoChico).toString() , style: estiloCarros,)
                           ],
                         ),
 
@@ -196,7 +229,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                             Text(soloLauto.toString() + "X", style: estiloAzul,),
                             SizedBox(width: 5),
                             Expanded(child: Text("Solo lavado auto chico",style: estiloCarros,)),
-                            Text("   MXN\$", style: estiloCarros,)
+                            Text("MXN\$" + (soloLauto * pSoloLchico).toString() , style: estiloCarros,)
                           ],
                         ),
 
@@ -207,7 +240,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                             Text(camioChica.toString() + "X", style: estiloAzul,),
                             SizedBox(width: 5),
                             Expanded(child: Text("Lavado y aspirado de camioneta chica",style: estiloCarros,)),
-                            Text("   MXN\$", style: estiloCarros,)
+                            Text("MXN\$" + (camioChica * pCamioChica).toString(), style: estiloCarros,)
                           ],
                         ),
 
@@ -218,7 +251,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                             Text(soloLcamio.toString() + "X", style: estiloAzul,),
                             SizedBox(width: 5),
                             Expanded(child: Text("Solo lavado camioneta chica",style: estiloCarros,)),
-                            Text("   MXN\$", style: estiloCarros,)
+                            Text("MXN\$" + (soloLcamio * pSoloLchica).toString() , style: estiloCarros,)
                           ],
                         ),
 
@@ -229,7 +262,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                             Text(motos.toString() + "X", style: estiloAzul,),
                             SizedBox(width: 5),
                             Expanded(child: Text("Solo lavado moto",style: estiloCarros,)),
-                            Text("   MXN\$", style: estiloCarros,)
+                            Text("MXN\$" + (pMotos * motos).toString(), style: estiloCarros,)
                           ],
                         ),
                       ],
@@ -248,7 +281,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                     child: Row(
                       children: <Widget>[
                         Expanded(child: Text("Total", style: estiloAzul)),
-                        Text("MXN\$", style: estiloNegro),
+                        Text("MXN\$" + total.toString() , style: estiloNegro),
                       ],
                     ),
                   ),

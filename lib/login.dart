@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fretummaster/colors.dart';
+import 'package:fretummaster/services/auth.dart';
 
 class Login extends StatefulWidget {
+
 
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Map data = {};
   bool checkBoxValue = true;
   Color _colorCubo = Colors.transparent;
+  String email = '';
+  String contra = '';
+  final AuthService _auth = AuthService();
+  final cContra = TextEditingController();
+  final cEmail = TextEditingController();
 
   @override
   void initState() {
@@ -21,13 +29,13 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    //data = ModalRoute.of(context).settings.arguments;
 
     // set background image
    // String bgImage = data['isDaytime'] ? 'day.png' : 'night.png';
     //Color bgColor = data['isDaytime'] ? Colors.blue : Colors.indigo[700];
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: azulFretum,
         centerTitle: true,
@@ -53,25 +61,36 @@ class _LoginState extends State<Login> {
                   margin: const EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 30.0),
                   child: Column(
                     children: <Widget>[
+
+                      //email
                       TextField(
+                        controller: cEmail,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.email, color: Colors.grey),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           labelText: "Correo electrónico"
                         ),
+                        onChanged: (val) {
+                          setState(() => email = val);
+                        },
                         textInputAction: TextInputAction.next,
                         onSubmitted: (_) => FocusScope.of(context).nextFocus(),
                       ),
                       SizedBox(height: 15.0),
+
+                      //contraseña
                       TextFormField(
+                        controller: cContra,
                         obscureText: true,
-                        keyboardType: TextInputType.visiblePassword ,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock, color: Colors.grey),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           labelText: "Contraseña",
                         ),
+                        onChanged: (val) {
+                          setState(() => contra = val);
+                        },
                       ),
                       Row(
                         children: <Widget>[
@@ -88,15 +107,31 @@ class _LoginState extends State<Login> {
                         ],
                       ),
                       SizedBox(height: 30.0),
+
+                      //boton de login
                       Container(
                         width: double.infinity,
                         height: 50.0,
                         child: RaisedButton(
-                          onPressed: (){
-                            Navigator.pushReplacementNamed(context, '/citas');
-                            setState(() {
-                              _colorCubo = azulFretum;
-                            });
+                          onPressed: () async {
+                            if(cContra.text.toString().isEmpty || cEmail.text.toString().isEmpty){
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Por favor llena los campos vacios')));
+                            }else{
+                              setState(() {
+                                _colorCubo = azulFretum;
+                              });
+                              dynamic result = await _auth.signInWithEmailAndPassword(email, contra);
+
+                              if(result == null){
+                                setState(() {
+                                  _colorCubo = Colors.transparent;
+                                });
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Correo o contraseña incorrecto')));
+                              }else{
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Bienvenido')));
+                                Navigator.pushReplacementNamed(context, '/citas');
+                              }
+                            }
                           },
                           child: Text("Iniciar sesión",
                           style: estiloBlanco),
@@ -105,10 +140,24 @@ class _LoginState extends State<Login> {
                           ),
                           color: azulFretum,
                           elevation: 3.0,
-                          highlightColor: Colors.blueAccent[800],
                         ),
                       ),
                       SizedBox(height: 15.0),
+                      Container(
+                        width: double.infinity,
+                        height: 50.0,
+                        child: FlatButton(
+                          onPressed: (){
+                            Navigator.pushReplacementNamed(context, '/register');
+                          },
+                          child: Text("Regístrate", style: estiloBlanco),
+                          color: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
                       FlatButton(
                         onPressed: (){
                           Navigator.pushReplacementNamed(context, '/olvide_contra');
