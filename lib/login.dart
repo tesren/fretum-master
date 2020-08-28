@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fretummaster/colors.dart';
 import 'package:fretummaster/services/auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Login extends StatefulWidget {
 
@@ -128,7 +129,15 @@ class _LoginState extends State<Login> {
                                 });
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Correo o contraseña incorrecto')));
                               }else{
-                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Bienvenido')));
+                                Fluttertoast.showToast(
+                                    msg: "Bienvenido a Fretum",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.grey[400],
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
                                 Navigator.pushReplacementNamed(context, '/citas');
                               }
                             }

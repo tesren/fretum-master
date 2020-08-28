@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fretummaster/citas.dart';
+import 'package:fretummaster/drawer.dart';
 import 'colors.dart';
 import 'perfil/perfil_datos.dart';
 import 'package:fretummaster/services/user_model.dart';
@@ -54,7 +54,7 @@ class _PerfilState extends State<Perfil> {
               ),
               backgroundColor: azulFretum,
             ),
-            drawer: crearDrawer(context),
+            drawer: NavigationDrawer(),
             body:  DatosPerfil() ?? Container(
               child: Center(
                 child:Column(

@@ -14,9 +14,12 @@ class _FechayHoraState extends State<FechayHora> {
   String convertedDate;
   Map _datos = {};
   TimeOfDay _hora;
+  String notas="";
+  String telefonoCliente = "";
 
-  final List<String> Lavadores =['Carlos Maldonado', 'Erick Pérez', 'Luis Monroy', 'Juan Gonzalez'];
-  String _currentLavador = 'Carlos Maldonado';
+
+  final List<String> Lavadores =['Joaquín Mercado', 'Erick Pérez', 'Luis Monroy', 'Juan Gonzalez'];
+  String _currentLavador = 'Joaquín Mercado';
 
 
   @override
@@ -85,7 +88,9 @@ class _FechayHoraState extends State<FechayHora> {
                   'motos': _datos['motos'],
                   'hora': _hora.format(context).toString(),
                   'fecha': convertedDate,
-                  'lavador': _currentLavador
+                  'lavador': _currentLavador,
+                  'telefono': telefonoCliente,
+                  'notas': notas
                 });
               },
             ),
@@ -171,7 +176,7 @@ class _FechayHoraState extends State<FechayHora> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     prefixIcon: Icon(Icons.motorcycle),
                   ),
-                  value: _currentLavador??'Carlos Maldonado',
+                  value: _currentLavador??'Joaquín Mercado',
                   items: Lavadores.map((lavador){
                     return DropdownMenuItem(
                       value: lavador,
@@ -181,6 +186,35 @@ class _FechayHoraState extends State<FechayHora> {
                     );
                   }).toList(),
                   onChanged: (val) => setState(() => _currentLavador = val),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextField(
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.phone, color: Colors.grey),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      labelText: "Teléfono del cliente"
+                  ),
+                  onChanged: (val) {
+                    setState(() => telefonoCliente = val);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextField(
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.note, color: Colors.grey),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      labelText: "¿Algo mas que se necesite saber?"
+                  ),
+                  onChanged: (val) {
+                    setState(() => notas = val);
+                  },
+                  textInputAction: TextInputAction.done,
                 ),
               ),
             ],

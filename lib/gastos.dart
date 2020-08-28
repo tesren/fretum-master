@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fretummaster/citas.dart';
+import 'package:fretummaster/drawer.dart';
 import 'colors.dart';
 
 class Gastos extends StatefulWidget {
@@ -43,7 +43,7 @@ class _GastosState extends State<Gastos> {
           ),
           backgroundColor: azulFretum,
         ),
-        drawer: crearDrawer(context),
+        drawer: NavigationDrawer(),
         floatingActionButton: Padding(
           padding: const EdgeInsets.all(10.0),
           child: FloatingActionButton(

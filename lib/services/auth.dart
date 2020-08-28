@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fretummaster/services/citas_model.dart';
 import 'package:fretummaster/services/database.dart';
 import 'user.dart';
 
@@ -16,20 +17,8 @@ class AuthService {
   Stream<User> get user {
     return _auth.onAuthStateChanged.map(_userFromFirebaseUser);
     //.map((FirebaseUser user) => _userFromFirebaseUser(user));
-
   }
 
-  // sign in anon
-  Future signInAnon() async {
-    try {
-      AuthResult result = await _auth.signInAnonymously();
-      FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
 
   // sign in with email and password
   Future signInWithEmailAndPassword(String email, String password) async {
@@ -44,12 +33,12 @@ class AuthService {
   }
 
   // register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(String email, String password, String nombre, String apellidos, int telefono) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
-      await DatabaseService(uid: user.uid).updateUserData("Erick", "Perez", 32210838, "tesren@live.com.mx");
+      await DatabaseService(uid: user.uid).updateUserData(nombre, apellidos, telefono, email );
       return _userFromFirebaseUser(user);
     } catch (error) {
       print(error.toString());

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fretummaster/services/auth.dart';
+import 'package:fretummaster/services/user.dart';
+import 'package:provider/provider.dart';
+import 'package:fretummaster/services/database.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -23,11 +26,16 @@ class _RegisterState extends State<Register> {
   String _email = '';
   String _contra = '';
   String _confirm = '';
+  int telefono = 0;
 
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
+
+    User user = Provider.of<User>(context);
+
+
     return WillPopScope(
       onWillPop: ()async{
         Navigator.pushReplacementNamed(context, '/login');
@@ -108,7 +116,7 @@ class _RegisterState extends State<Register> {
                         labelText: "Telefono"
                     ),
                     onChanged: (val) {
-                      // setState(() => email = val);
+                       //setState(() => telefono = val);
                     },
                     textInputAction: TextInputAction.next,
                     onSubmitted: (_) => FocusScope.of(context).nextFocus(),
@@ -183,7 +191,7 @@ class _RegisterState extends State<Register> {
                           setState(() {
                             _colorCubo = azulFretum;
                           });
-                          dynamic result = await _auth.registerWithEmailAndPassword(_email, _contra);
+                          dynamic result = await _auth.registerWithEmailAndPassword(_email, _contra, _cNombre.text.toString(), _cApellidos.text.toString(), int.tryParse(_cPhone.text.trim()));
 
                           if(result == null){
                             setState(() {

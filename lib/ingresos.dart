@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'colors.dart';
-import 'citas.dart';
+import 'package:fretummaster/drawer.dart';
 
 class Ingresos extends StatefulWidget {
   @override
@@ -43,7 +43,7 @@ class _IngresosState extends State<Ingresos> {
             ],
           ),
         ),
-        drawer: crearDrawer(context),
+        drawer: NavigationDrawer(),
         floatingActionButton: Padding(
           padding: const EdgeInsets.all(10.0),
           child: FloatingActionButton(

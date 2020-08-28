@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ConfirmarCita extends StatefulWidget {
   @override
@@ -11,6 +13,7 @@ class ConfirmarCita extends StatefulWidget {
 
 class _ConfirmarCitaState extends State<ConfirmarCita> {
 
+  final db = Firestore.instance;
   Map _datos = {};
   Set<Marker> markers = Set();
   GoogleMapController  _mapController;
@@ -21,12 +24,17 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
     _datos = ModalRoute.of(context).settings.arguments;
 
    //datos de las pantallas anteriores
-    LatLng direccion = _datos['latlong'];
+    LatLng direccionLatLong = _datos['latlong'];
+    String direccion = _datos['direccion'];
     int autoChico = _datos['autoChico'];
     int soloLauto = _datos['soloLauto'];
     int camioChica = _datos['camioChica'];
     int soloLcamio = _datos['soloLcamio'];
     int motos = _datos['motos'];
+    String telefono = _datos['telefono'];
+    String notas = _datos['notas'];
+    String fecha = _datos['fecha'];
+    String hora = _datos['hora'];
 
     //costos de los servicios
     int pAutoChico = 99;
@@ -47,7 +55,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
     markers = Set();
     markers.add(Marker(
       markerId: MarkerId("target"),
-      position: direccion,
+      position: direccionLatLong,
     ),
     );
 
@@ -107,8 +115,37 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                 //Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_forward, color: Colors.white,))
               ],
             ),
-            onPressed: (){
-              print(_datos);
+
+            //registrar la cita
+            onPressed: () async{
+             // print(_datos);
+              DocumentReference ref = await db.collection("citas").add({
+                'direccion': '$direccion',
+                'LatLong': '$direccionLatLong',
+                'fecha': '$fecha',
+                'hora': '$hora',
+                'tiempo': '$tiempoEstim',
+                'telefono': '$telefono',
+                'autoChico': '$autoChico',
+                'soloLChico': '$soloLauto',
+                'camioChica': '$camioChica',
+                'soloLCamioChica': '$soloLcamio',
+                'motos': '$motos',
+                'total': '$total',
+                'metodo': 'Efectivo',
+                'notas': '$notas'
+              });
+
+              Fluttertoast.showToast(
+                  msg: "Cita agregada exitosamente",
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey[400],
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+              Navigator.pushReplacementNamed(context, "/citas");
             },
           ),
           elevation: 5,
@@ -125,10 +162,10 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                   height: 200,
                   margin: EdgeInsets.fromLTRB(20, 15, 20, 10),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[400], width: 5)
+                      border: Border.all(color: Colors.grey[400], width: 3.5)
                   ),
 
-                  child: direccion == null ? Container(
+                  child: direccionLatLong == null ? Container(
                   child: Center(
                   child:Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +184,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                   //mapa para mostrar la ubicacion del lavado
                   GoogleMap(
                     initialCameraPosition: CameraPosition(
-                        target: direccion,
+                        target: direccionLatLong,
                         zoom: 18,
                     ),
                     zoomGesturesEnabled: false,
@@ -168,7 +205,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                 //contenedor de fecha y tiempo
                 Container(
                   width: double.infinity,
-                  height: 75,
+                  //height: 95,
                   decoration: BoxDecoration(
                       border: Border(top: BorderSide(color: Colors.grey[400], width: 2), bottom: BorderSide(color: Colors.grey[400], width: 2))
                   ),
@@ -193,7 +230,17 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                           SizedBox(width: 5),
                           Text("Tiempo estimado del lavado: " + tiempoEstim.toString() + " horas",style: estiloNegro),
                       ],
-                      )
+                      ),
+                      SizedBox(height: 7),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.phone),
+                          SizedBox(width: 5),
+                          Text("Teléfono del cliente: $telefono"  ,style: estiloNegro),
+                        ],
+                      ),
+                      SizedBox(height: 3),
                     ],
                   ),
                 ),
@@ -281,7 +328,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                     child: Row(
                       children: <Widget>[
                         Expanded(child: Text("Total", style: estiloAzul)),
-                        Text("MXN\$" + total.toString() , style: estiloNegro),
+                        Text("MXN\$" + total.toString() , style: TextStyle(color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -305,6 +352,21 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                     ),
                   ),
                 ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      border: Border( bottom: BorderSide(color: Colors.grey[400], width: 2) )
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(child: Text("Notas", style: estiloAzul)),
+                        Text(notas, style: estiloNegro),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),

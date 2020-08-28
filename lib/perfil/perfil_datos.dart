@@ -18,8 +18,8 @@ class _DatosPerfilState extends State<DatosPerfil> {
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<User>(context);
-    print(user);
+    final user = Provider.of<User>(context) ;
+    //print(user);
     double pRating = 5.0;
 
 
@@ -38,8 +38,8 @@ class _DatosPerfilState extends State<DatosPerfil> {
                     children: <Widget>[
                       SizedBox(height: 20.0),
                       CircleAvatar(
-                        backgroundImage: AssetImage("assets/profilepic.png"),
-                        backgroundColor: Colors.grey,
+                        backgroundImage: AssetImage("assets/outline_account_circle_black_48pt_3x.png"),
+                        backgroundColor: Colors.white,
                         radius: 60.0,
                       ),
                       SizedBox(height: 30.0),

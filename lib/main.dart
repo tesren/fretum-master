@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fretummaster/agregar_gasto.dart';
 import 'package:fretummaster/cambiar_contra.dart';
 import 'package:fretummaster/cambiar_nombre.dart';
 import 'package:fretummaster/citas.dart';
 import 'package:fretummaster/services/auth.dart';
+import 'package:fretummaster/services/citas_model.dart';
 import 'package:fretummaster/services/user.dart';
 import 'package:provider/provider.dart';
 import 'config.dart';
@@ -37,7 +39,7 @@ import 'register.dart';
             routes: {
               '/': (context) => Loading(),
               '/login': (context) => Login(),
-              '/citas': (context) => Citas(),
+              '/citas': (context) => CitasMostrar(),
               '/olvide_contra': (context) => Olvide_contra(),
               '/perfil': (context) => Perfil(),
               '/ingresos': (context) => Ingresos(),

@@ -4,6 +4,8 @@ import 'colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:address_search_field/address_search_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 class AgregarGasto extends StatefulWidget {
@@ -12,11 +14,19 @@ class AgregarGasto extends StatefulWidget {
 }
 
 class _AgregarGastoState extends State<AgregarGasto> {
+
   GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
+  TextEditingController _controllerAdress = TextEditingController();
+  final db = Firestore.instance;
+
   DateTime _dateTime;
   String convertedDate;
   final List<String> metodos =['Efectivo', 'Tarjeta', 'Otro'];
   String _currentMetod;
+  String _nombre= "";
+  String _monto = "0";
+  String _descripcion = "";
+  String _lugar = "";
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +62,8 @@ class _AgregarGastoState extends State<AgregarGasto> {
             onPressed: () => Navigator.pushReplacementNamed(context, '/gastos'),
           ),
         ),
+
+        //boton para insertar a la base de datos
         bottomNavigationBar: SizedBox( height: 55, width: double.infinity,
           child: BottomAppBar(
             color: azulFretum,
@@ -62,19 +74,41 @@ class _AgregarGastoState extends State<AgregarGasto> {
                     Align(alignment: Alignment.centerRight, child: Icon(Icons.arrow_forward, color: Colors.white,))
                   ],
                 ),
-              onPressed: (){
+              onPressed: () async {
+                  DocumentReference ref = await db.collection("gastos").add({
+                    'nombre': '$_nombre',
+                    'descripcion': '$_descripcion',
+                    'lugar': '$_lugar',
+                    'fecha': '$convertedDate',
+                    'monto': '$_monto',
+                    'metodo': '$_currentMetod'
+                  });
+
+                  Fluttertoast.showToast(
+                      msg: "Gasto registrado",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.grey[400],
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
+
                   Navigator.pushReplacementNamed(context, '/gastos');
               },
             ),
             elevation: 0,
           ),
         ),
+
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 0.0),
               child: Column(
                 children: <Widget>[
+
+                  //nombre
                   TextField(
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
@@ -84,26 +118,39 @@ class _AgregarGastoState extends State<AgregarGasto> {
                         //hintText: "Nombre",
                       labelText: "Nombre",
                     ),
+                    onChanged: (val) {
+                      setState(() => _nombre = val);
+                    },
                     textInputAction: TextInputAction.next,
                     onSubmitted: (_) => FocusScope.of(context).nextFocus(),
                   ),
                   SizedBox(height: 20.0),
+
+                  //Descripción
                   TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       prefixIcon: Icon(Icons.description),
                       labelText: "Descripción"
                     ),
+                    onChanged: (val) {
+                      setState(() => _descripcion = val);
+                    },
                     textInputAction: TextInputAction.next,
                     onSubmitted: (_) => FocusScope.of(context).nextFocus(),
                   ),
                   SizedBox(height: 20.0),
+
+                 //Lugar
                   AddressSearchField(
+                    controller: _controllerAdress,
                     country: "México",
                     city: "Puerto Vallarta",
                     hintText: "Lugar",
                     noResultsText: "No hay resultados",
                     onDone: (AddressPoint point) async{
+                       _lugar = point.address;
+                      _controllerAdress.text = _lugar;
                       Navigator.pop(context);
                     },
                     decoration: InputDecoration(
@@ -111,9 +158,10 @@ class _AgregarGastoState extends State<AgregarGasto> {
                         prefixIcon: Icon(Icons.add_location),
                         labelText: "Lugar"
                     ),
-
                   ),
                   SizedBox(height: 20.0),
+
+                 //fecha
                  Container(
                    height: 55, width: double.infinity,
                    child: RaisedButton(
@@ -139,14 +187,15 @@ class _AgregarGastoState extends State<AgregarGasto> {
                            lastDate: DateTime(2030,)).then((date){
                          setState(() {
                            _dateTime = date;
-                           convertedDate = new DateFormat("yyyy-MM-dd").format(_dateTime);
-
+                           convertedDate = new DateFormat("dd-MM-yyyy").format(_dateTime);
                          });
                        });
                      },
                    ),
                  ),
                   SizedBox(height: 20.0),
+
+                  //monto
                   TextField(
                     keyboardType: TextInputType.number,
                     //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
@@ -155,10 +204,15 @@ class _AgregarGastoState extends State<AgregarGasto> {
                         prefixIcon: Icon(Icons.attach_money),
                         labelText: "Monto"
                     ),
+                    onChanged: (val) {
+                      setState(() => _monto = val);
+                    },
                     textInputAction: TextInputAction.next,
                     onSubmitted: (_) => FocusScope.of(context).nextFocus(),
                   ),
                   SizedBox(height: 20.0),
+
+                  //método de pago
                   DropdownButtonFormField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),

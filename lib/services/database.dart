@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fretummaster/services/user_model.dart';
+import 'package:fretummaster/services/citas_model.dart';
 
 class DatabaseService {
 
@@ -7,11 +8,12 @@ class DatabaseService {
   final String uid;
   DatabaseService({this.uid});
 
+  //referencias
   final CollectionReference usersCollection = Firestore.instance.collection("users");
+  final CollectionReference citasCollection = Firestore.instance.collection("citas");
 
-
+//no usado CREO
   Future updateUserData(String nombre, String apellidos, int telefono, String correo) async {
-
     return await usersCollection.document(uid).setData({
       'nombre': nombre,
       'apellidos': apellidos,
@@ -19,16 +21,22 @@ class DatabaseService {
       'correo': correo,
     });
   }
-  //lista de usuarios
- /* List<Usuarios> _listaUsuariosSnapshot(QuerySnapshot snapshot){
+
+
+
+  //lista de citas
+  List<Citas> _listaCitasSnapshot(QuerySnapshot snapshot){
     return snapshot.documents.map((doc){
-      return Usuarios(
-        nombre: doc.data['nombre'] ?? '',
-        apellidos: doc.data['apellidos'] ?? '',
-        telefono: doc.data['telefono'] ?? 0,
+      return Citas(
+        id: doc.documentID,
+        fecha: doc.data['fecha'] ?? '',
+        hora: doc.data['hora'] ?? '',
+        direccion: doc.data['direccion'] ?? '',
+        tiempoEstimado: doc.data['tiempo']?? '',
+        total: doc.data['total'] ?? ''
       );
     }).toList();
-  }*/
+  }
 
   // user data from snapshots
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
@@ -41,9 +49,12 @@ class DatabaseService {
     );
   }
 
- /* Stream<List<Usuarios>> get users{
-    return usersCollection.snapshots().map(_listaUsuariosSnapshot);
-  }*/
+  //Stream de citas
+  Stream<List<Citas>> get citas{
+    return citasCollection.snapshots().map(_listaCitasSnapshot);
+  }
+
+
   // get user doc stream
   Stream<UserData> get userData {
     return usersCollection.document(uid).snapshots().map(_userDataFromSnapshot);
