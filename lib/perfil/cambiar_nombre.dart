@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fretummaster/services/user_model.dart';
-import 'colors.dart';
+import '../colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fretummaster/services/user.dart';
 import 'package:provider/provider.dart';

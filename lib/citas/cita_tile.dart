@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'colors.dart';
-import 'package:fretummaster/services/citas_model.dart';
+import '../colors.dart';
+import 'citas_model.dart';
 
 
 class CitasTile extends StatelessWidget {
 
-  final Citas cita;
+  final CitasModel cita;
   CitasTile({this.cita});
 
   @override

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fretummaster/gastos/gastos_model.dart';
 import 'package:fretummaster/services/user_model.dart';
-import 'package:fretummaster/services/citas_model.dart';
+import 'package:fretummaster/citas/citas_model.dart';
 
 class DatabaseService {
 
@@ -11,6 +12,7 @@ class DatabaseService {
   //referencias
   final CollectionReference usersCollection = Firestore.instance.collection("users");
   final CollectionReference citasCollection = Firestore.instance.collection("citas");
+  final CollectionReference gastosCollection = Firestore.instance.collection("gastos");
 
 //no usado CREO
   Future updateUserData(String nombre, String apellidos, int telefono, String correo) async {
@@ -25,15 +27,31 @@ class DatabaseService {
 
 
   //lista de citas
-  List<Citas> _listaCitasSnapshot(QuerySnapshot snapshot){
+  List<CitasModel> _listaCitasSnapshot(QuerySnapshot snapshot){
     return snapshot.documents.map((doc){
-      return Citas(
+      return CitasModel(
         id: doc.documentID,
         fecha: doc.data['fecha'] ?? '',
         hora: doc.data['hora'] ?? '',
         direccion: doc.data['direccion'] ?? '',
         tiempoEstimado: doc.data['tiempo']?? '',
         total: doc.data['total'] ?? ''
+      );
+    }).toList();
+  }
+
+
+  //lista de gastos
+  List<GastosModel> _listaGastosSnapshot(QuerySnapshot snapshot){
+    return snapshot.documents.map((doc){
+      return GastosModel(
+        id: doc.documentID,
+        nombre: doc.data['nombre'] ?? '',
+        descripcion: doc.data['descripcion'] ?? '',
+        lugar: doc.data['lugar'] ?? '',
+        fecha: doc.data['fecha'] ?? '',
+        monto: doc.data['monto'] ?? '',
+        metodo: doc.data['metodo'] ?? '',
       );
     }).toList();
   }
@@ -50,8 +68,13 @@ class DatabaseService {
   }
 
   //Stream de citas
-  Stream<List<Citas>> get citas{
+  Stream<List<CitasModel>> get citas{
     return citasCollection.snapshots().map(_listaCitasSnapshot);
+  }
+
+  //Stream de gastos
+  Stream<List<GastosModel>> get gastos{
+    return gastosCollection.snapshots().map(_listaGastosSnapshot);
   }
 
 

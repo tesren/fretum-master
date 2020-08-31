@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fretummaster/drawer.dart';
-import 'colors.dart';
-import 'perfil/perfil_datos.dart';
+import '../colors.dart';
+import 'perfil_datos.dart';
 import 'package:fretummaster/services/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

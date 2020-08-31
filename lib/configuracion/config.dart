@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fretummaster/drawer.dart';
-import 'colors.dart';
+import '../colors.dart';
 import 'package:fretummaster/services/auth.dart';
 import 'package:fretummaster/services/user_model.dart';
 import 'package:fretummaster/services/user.dart';
@@ -150,26 +150,6 @@ class _ConfigState extends State<Config> {
                               Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20.0,),
                             ],
                           ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
-                      child: Container(
-                        width: double.infinity, height: 50,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(10.0)
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
-                              child: Icon(Icons.mail, color: Colors.grey, size: 35.0,),
-                            ),
-                            Expanded(child: Text("Buzón de quejas y sugerencias", style: estiloNegro,)),
-                            Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20.0,),
-                          ],
                         ),
                       ),
                     ),

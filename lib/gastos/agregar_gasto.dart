@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'colors.dart';
+import '../colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:address_search_field/address_search_field.dart';
@@ -22,7 +22,7 @@ class _AgregarGastoState extends State<AgregarGasto> {
   DateTime _dateTime;
   String convertedDate;
   final List<String> metodos =['Efectivo', 'Tarjeta', 'Otro'];
-  String _currentMetod;
+  String _currentMetod = "Efectivo";
   String _nombre= "";
   String _monto = "0";
   String _descripcion = "";

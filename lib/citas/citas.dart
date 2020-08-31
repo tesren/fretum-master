@@ -4,7 +4,7 @@ import 'package:fretummaster/colors.dart';
 import 'package:fretummaster/drawer.dart';
 import 'package:fretummaster/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:fretummaster/services/citas_model.dart';
+import 'citas_model.dart';
 import 'citas_lista.dart';
 
 
@@ -33,7 +33,7 @@ class _CitasMostrarState extends State<CitasMostrar> {
         }
         return false;
       },
-      child: StreamProvider<List<Citas>>.value(
+      child: StreamProvider<List<CitasModel>>.value(
         value: DatabaseService().citas,
         child: Scaffold(
           key: _key,

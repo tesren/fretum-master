@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'colors.dart';
+import '../colors.dart';
 import 'package:provider/provider.dart';
-import 'package:fretummaster/services/citas_model.dart';
+import 'citas_model.dart';
 import 'cita_tile.dart';
 
 class CitasLista extends StatefulWidget {
@@ -13,7 +13,7 @@ class _CitasListaState extends State<CitasLista> {
   @override
   Widget build(BuildContext context) {
 
-    final citas = Provider.of<List<Citas>>(context);
+    final citas = Provider.of<List<CitasModel>>(context) ?? [];
 
     return Container(
         padding: EdgeInsets.fromLTRB(5,5,5,5),

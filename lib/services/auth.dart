@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fretummaster/services/citas_model.dart';
+import 'file:///C:/Users/tesre/AndroidStudioProjects/fretum_master/lib/citas/citas_model.dart';
 import 'package:fretummaster/services/database.dart';
 import 'user.dart';
 
