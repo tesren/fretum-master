@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'colors.dart';
-
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 
 class FechayHora extends StatefulWidget {
@@ -10,12 +10,14 @@ class FechayHora extends StatefulWidget {
 }
 
 class _FechayHoraState extends State<FechayHora> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _dateTime;
   String convertedDate;
   Map _datos = {};
   TimeOfDay _hora;
   String notas="";
   String telefonoCliente = "";
+  final _cPhone = TextEditingController();
 
 
   final List<String> Lavadores =['Joaquín Mercado', 'Erick Pérez', 'Luis Monroy', 'Juan Gonzalez'];
@@ -42,6 +44,7 @@ class _FechayHoraState extends State<FechayHora> {
         return false;
       },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Row(
             children: <Widget>[
@@ -78,20 +81,25 @@ class _FechayHoraState extends State<FechayHora> {
                 ],
               ),
               onPressed: (){
-                Navigator.pushReplacementNamed(context, '/confirmarCita', arguments: {
-                  'direccion': _datos['direccion'],
-                  'latlong' : _datos['latlong'],
-                  'autoChico': _datos['autoChico'],
-                  'soloLauto': _datos['soloLauto'],
-                  'camioChica': _datos['camioChica'],
-                  'soloLcamio': _datos['soloLcamio'],
-                  'motos': _datos['motos'],
-                  'hora': _hora.format(context).toString(),
-                  'fecha': convertedDate,
-                  'lavador': _currentLavador,
-                  'telefono': telefonoCliente,
-                  'notas': notas
-                });
+                if(_cPhone.text.isEmpty || convertedDate == null || _hora == null){
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Por favor llena todos los campos requeridos")));
+                }else {
+                  Navigator.pushReplacementNamed(
+                      context, '/confirmarCita', arguments: {
+                    'direccion': _datos['direccion'],
+                    'latlong': _datos['latlong'],
+                    'autoChico': _datos['autoChico'],
+                    'soloLauto': _datos['soloLauto'],
+                    'camioChica': _datos['camioChica'],
+                    'soloLcamio': _datos['soloLcamio'],
+                    'motos': _datos['motos'],
+                    'hora': _hora.format(context).toString(),
+                    'fecha': convertedDate,
+                    'lavador': _currentLavador,
+                    'telefono': _cPhone.text.toString(),
+                    'notas': notas
+                  });
+                }
               },
             ),
             elevation: 0,
@@ -162,7 +170,7 @@ class _FechayHoraState extends State<FechayHora> {
                         lastDate: DateTime(2030,)).then((date){
                       setState(() {
                         _dateTime = date;
-                        convertedDate = new DateFormat("yyyy-MM-dd").format(_dateTime);
+                        convertedDate = new DateFormat("dd-MM-yyyy").format(_dateTime);
                       });
                     });
                   },
@@ -188,20 +196,25 @@ class _FechayHoraState extends State<FechayHora> {
                   onChanged: (val) => setState(() => _currentLavador = val),
                 ),
               ),
+
+              //telefono cliente
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.phone, color: Colors.grey),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      labelText: "Teléfono del cliente"
+                child: InternationalPhoneNumberInput(
+                  ignoreBlank: false,
+                  maxLength: 15,
+                  countries: ['MX'],
+                  autoValidate: false,
+                  selectorTextStyle: TextStyle(color: Colors.black),
+                  textFieldController: _cPhone,
+                  inputDecoration: InputDecoration(
+                    prefixIcon: Icon(Icons.local_phone, color: Colors.grey),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    labelText: "Teléfono del cliente",
                   ),
-                  onChanged: (val) {
-                    setState(() => telefonoCliente = val);
-                  },
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextField(

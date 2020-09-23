@@ -28,8 +28,37 @@ class _AgregarGastoState extends State<AgregarGasto> {
   String _descripcion = "";
   String _lugar = "";
 
+  FToast fToast;
+
+  Widget _toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.0),
+      color: Colors.green,
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.check_circle, color: Colors.white),
+        SizedBox(
+          width: 12.0,
+        ),
+        Text("Gasto registrado", style: TextStyle(fontSize: 14, color: Colors.white),),
+      ],
+    ),
+  );
+
+  _showToast() {
+    fToast.showToast(
+      child: _toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    fToast = FToast(context);
 
     String dropdownValue = 'Efectivo';
     return WillPopScope(
@@ -75,26 +104,20 @@ class _AgregarGastoState extends State<AgregarGasto> {
                   ],
                 ),
               onPressed: () async {
-                  DocumentReference ref = await db.collection("gastos").add({
-                    'nombre': '$_nombre',
-                    'descripcion': '$_descripcion',
-                    'lugar': '$_lugar',
-                    'fecha': '$convertedDate',
-                    'monto': '$_monto',
-                    'metodo': '$_currentMetod'
-                  });
-
-                  Fluttertoast.showToast(
-                      msg: "Gasto registrado",
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.grey[400],
-                      textColor: Colors.white,
-                      fontSize: 16.0
-                  );
-
-                  Navigator.pushReplacementNamed(context, '/gastos');
+                  if(_nombre == "" || _monto == "" || _descripcion == "" || _lugar == "" || convertedDate == null ){
+                    _key.currentState.showSnackBar(SnackBar(content: Text("Por favor llena todos los campos vacios")));
+                  }else {
+                    DocumentReference ref = await db.collection("gastos").add({
+                      'nombre': '$_nombre',
+                      'descripcion': '$_descripcion',
+                      'lugar': '$_lugar',
+                      'fecha': '$convertedDate',
+                      'monto': '$_monto',
+                      'metodo': '$_currentMetod'
+                    });
+                    _showToast();
+                    Navigator.pushReplacementNamed(context, '/gastos');
+                  }
               },
             ),
             elevation: 0,
@@ -148,10 +171,10 @@ class _AgregarGastoState extends State<AgregarGasto> {
                     city: "Puerto Vallarta",
                     hintText: "Lugar",
                     noResultsText: "No hay resultados",
-                    onDone: (AddressPoint point) async{
+                    onDone: (BuildContext dialogContext, AddressPoint point) async{
                        _lugar = point.address;
                       _controllerAdress.text = _lugar;
-                      Navigator.pop(context);
+                      Navigator.pop(dialogContext);
                     },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),

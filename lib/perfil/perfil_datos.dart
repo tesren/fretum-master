@@ -38,7 +38,7 @@ class _DatosPerfilState extends State<DatosPerfil> {
                     children: <Widget>[
                       SizedBox(height: 20.0),
                       CircleAvatar(
-                        backgroundImage: AssetImage("assets/outline_account_circle_black_48pt_3x.png"),
+                        backgroundImage: AssetImage("assets/baseline_account_circle_black_48dp.png"),
                         backgroundColor: Colors.white,
                         radius: 60.0,
                       ),

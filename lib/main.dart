@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fretummaster/citas/detalles_cita.dart';
 import 'package:fretummaster/gastos/agregar_gasto.dart';
 import 'package:fretummaster/perfil/cambiar_contra.dart';
 import 'package:fretummaster/citas/citas.dart';
@@ -58,6 +59,7 @@ import 'login/register.dart';
               '/fechayhora': (context) => FechayHora(),
               '/confirmarCita': (context)=> ConfirmarCita(),
               '/register': (context)=> Register(),
+              '/detallesCita':(context)=> DetallesCita(),
             },
 
             supportedLocales: [

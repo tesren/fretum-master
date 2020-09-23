@@ -23,6 +23,24 @@ class _LoginState extends State<Login> {
   final cContra = TextEditingController();
   final cEmail = TextEditingController();
 
+  FToast fToast;
+
+  Widget toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.0),
+      color: azulFretum,
+    ),
+    child: Text("Bienvenido a Fretum Master", style: TextStyle(fontSize: 14, color: Colors.white),),
+  );
+  _showToast() {
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +48,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-
+    fToast = FToast(context);
     // set background image
    // String bgImage = data['isDaytime'] ? 'day.png' : 'night.png';
     //Color bgColor = data['isDaytime'] ? Colors.blue : Colors.indigo[700];
@@ -129,15 +147,9 @@ class _LoginState extends State<Login> {
                                 });
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Correo o contraseña incorrecto')));
                               }else{
-                                Fluttertoast.showToast(
-                                    msg: "Bienvenido a Fretum",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.grey[400],
-                                    textColor: Colors.white,
-                                    fontSize: 16.0
-                                );
+
+                                //mostrar Toast personalizado
+                               _showToast();
                                 Navigator.pushReplacementNamed(context, '/citas');
                               }
                             }

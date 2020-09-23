@@ -15,7 +15,7 @@ class DatabaseService {
   final CollectionReference gastosCollection = Firestore.instance.collection("gastos");
 
 //no usado CREO
-  Future updateUserData(String nombre, String apellidos, int telefono, String correo) async {
+  Future updateUserData(String nombre, String apellidos, String telefono, String correo) async {
     return await usersCollection.document(uid).setData({
       'nombre': nombre,
       'apellidos': apellidos,
@@ -35,7 +35,16 @@ class DatabaseService {
         hora: doc.data['hora'] ?? '',
         direccion: doc.data['direccion'] ?? '',
         tiempoEstimado: doc.data['tiempo']?? '',
-        total: doc.data['total'] ?? ''
+        total: doc.data['total'] ?? '',
+        latlong: doc.data['LatLong'] ?? '',
+        autoChico: doc.data['autoChico'] ?? '',
+        camioChica: doc.data['camioChica'] ?? '',
+        metodo: doc.data['metodo'] ?? '',
+        motos: doc.data['motos'] ?? '',
+        notas: doc.data['notas'] ?? '',
+        telefono: doc.data['telefono'] ?? '',
+        soloLcamioChica: doc.data['soloLCamioChica'] ?? '',
+        soloLchico: doc.data['soloLChico'] ?? '',
       );
     }).toList();
   }

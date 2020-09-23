@@ -54,7 +54,7 @@ class _GastosState extends State<Gastos> {
             padding: const EdgeInsets.all(10.0),
             child: FloatingActionButton(
               backgroundColor: azulFretum,
-              child: Icon(Icons.remove),
+              child: Icon(Icons.add),
               onPressed: (){
                 Navigator.pushReplacementNamed(context, '/agregarGasto');
               },

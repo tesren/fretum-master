@@ -69,6 +69,7 @@ class _Agregar_citaState extends State<Agregar_cita> {
         return false;
       },
       child: Scaffold(
+        key: _key,
         appBar: AppBar(
           elevation: 0,
           title: Row(
@@ -106,10 +107,14 @@ class _Agregar_citaState extends State<Agregar_cita> {
                 ],
               ),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/agregarCarros', arguments:{
-                  'direccion': Adress,
-                  'latlong': posicion
-                });
+                if(Adress=="" || posicion == null || controllerAdress.text.isEmpty || controllerAdress.text.length < 10){
+                    _key.currentState.showSnackBar(SnackBar(content: Text('Por favor Ingresa una dirección válida')));
+                }else {
+                  Navigator.pushReplacementNamed(context, '/agregarCarros', arguments: {
+                    'direccion': Adress,
+                    'latlong': posicion
+                  });
+                }
               },
             ),
             elevation: 0,
@@ -135,7 +140,7 @@ class _Agregar_citaState extends State<Agregar_cita> {
                     hintText: "Dirección",
                     noResultsText: "No hay resultados",
 
-                    onDone: (AddressPoint point) async{
+                    onDone: (BuildContext dialogContext, AddressPoint point) async{
                       target = LatLng(point.latitude, point.longitude);
                       setState(() {
                         Adress = point.address;
@@ -151,7 +156,7 @@ class _Agregar_citaState extends State<Agregar_cita> {
                       });
                       _mapController.animateCamera(CameraUpdate.newLatLng(target));
 
-                      Navigator.pop(context);
+                      Navigator.pop(dialogContext);
                     },
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.add_location),

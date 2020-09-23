@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'file:///C:/Users/tesre/AndroidStudioProjects/fretum_master/lib/citas/citas_model.dart';
 import 'package:fretummaster/services/database.dart';
 import 'user.dart';
 
@@ -33,7 +32,7 @@ class AuthService {
   }
 
   // register with email and password
-  Future registerWithEmailAndPassword(String email, String password, String nombre, String apellidos, int telefono) async {
+  Future registerWithEmailAndPassword(String email, String password, String nombre, String apellidos, String telefono) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;

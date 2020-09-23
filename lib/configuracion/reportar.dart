@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Reportar extends StatefulWidget {
   @override
@@ -9,7 +11,10 @@ class Reportar extends StatefulWidget {
 }
 
 class _ReportarState extends State<Reportar> {
+  GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
   Color _colorCubo = Colors.transparent;
+  final db = Firestore.instance;
+  String problema = "";
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +25,7 @@ class _ReportarState extends State<Reportar> {
     },
 
         child: Scaffold(
+          key: _key,
           appBar: AppBar(
             title: Row(
               children: <Widget>[
@@ -58,6 +64,11 @@ class _ReportarState extends State<Reportar> {
                     ),
                     maxLines: null,
                     maxLength: 500,
+                    onChanged: (val){
+                      setState(() {
+                        problema = val;
+                      });
+                    },
                   ),
                   SizedBox(height: 10),
                   Text("Nos comunicaremos contigo a tu correo o número de teléfono para dar respuesta a tu problema", style: estiloGris, textAlign: TextAlign.center),
@@ -71,14 +82,38 @@ class _ReportarState extends State<Reportar> {
                           borderRadius: BorderRadius.circular(10.0)
                       ),
                       child: Text("Enviar", style:  estiloBlanco,),
-                      onPressed: (){
-                        setState(() {
-                          _colorCubo = azulFretum;
-                        });
-                        Navigator.pushReplacementNamed(context, '/config');
-                      },
+
+                      //registrar problema
+                      onPressed: ()async {
+                        if (problema == "" || problema.length < 8) {
+                          _key.currentState.showSnackBar(SnackBar(content: Text(
+                              "Por favor describe mas el problema")));
+                        }
+                        else {
+                          setState(() {
+                            _colorCubo = azulFretum;
+                          });
+
+                          DocumentReference ref = await db.collection(
+                              "problemas").add({
+                            'problema': '$problema',
+                          });
+
+                          Fluttertoast.showToast(
+                              msg: "Problema reportado",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+                          Navigator.pushReplacementNamed(context, '/config');
+                        }
+                      }
                     ),
                   ),
+                  SizedBox(height: 30),
                   SpinKitFadingCube(
                     size: 40.0,
                     color: _colorCubo,

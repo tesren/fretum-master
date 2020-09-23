@@ -161,12 +161,17 @@ class _ConfigState extends State<Config> {
                         onTap: (){
                           showDialog(context: context,
                               builder: (_) => AlertDialog(
-                                title: Text("Cerrar Sesión", style: estiloNegro,),
+                                title: Row(
+                                  children: <Widget>[
+                                    Icon(Icons.exit_to_app),
+                                    Text("  Cerrar Sesión", style: estiloNegro,),
+                                  ],
+                                ),
                                 content: Text("¿Estás seguro que deseas cerrar la sesión actual?", style: estiloGris,),
                                 actions: <Widget>[
                                   FlatButton(child: Text("Cancelar"),
                                     onPressed: (){
-                                      Navigator.pop(context);
+                                      Navigator.pop(_);
                                     },),
                                   FlatButton(child: Text("Si"),
                                     onPressed: ()async{

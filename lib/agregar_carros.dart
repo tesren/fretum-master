@@ -10,6 +10,7 @@ class AgregarCarros extends StatefulWidget {
 
 class _AgregarCarrosState extends State<AgregarCarros> {
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   Map _datos = {};
 
   int autoChico = 0;
@@ -31,6 +32,7 @@ class _AgregarCarrosState extends State<AgregarCarros> {
         return false;
       },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Row(
             children: <Widget>[
@@ -64,15 +66,20 @@ class _AgregarCarrosState extends State<AgregarCarros> {
                 ],
               ),
               onPressed: (){
-                Navigator.pushReplacementNamed(context, '/fechayhora', arguments: {
-                  'direccion': _datos['direccion'],
-                  'latlong' : _datos['latlong'],
-                  'autoChico': autoChico,
-                  'soloLauto': soloLauto,
-                  'camioChica': camioChica,
-                  'soloLcamio': soloLcamio,
-                  'motos': motos
-                });
+                if(autoChico == 0 && soloLauto == 0 && camioChica == 0 && soloLcamio == 0){
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Por favor selecciona un servicio")));
+                }else {
+                  Navigator.pushReplacementNamed(
+                      context, '/fechayhora', arguments: {
+                    'direccion': _datos['direccion'],
+                    'latlong': _datos['latlong'],
+                    'autoChico': autoChico,
+                    'soloLauto': soloLauto,
+                    'camioChica': camioChica,
+                    'soloLcamio': soloLcamio,
+                    'motos': motos
+                  });
+                }
               },
             ),
             elevation: 0,

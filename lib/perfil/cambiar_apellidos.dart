@@ -5,6 +5,7 @@ import 'package:fretummaster/services/user.dart';
 import 'package:provider/provider.dart';
 import 'package:fretummaster/services/database.dart';
 import 'package:fretummaster/services/user_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CambiarApellidos extends StatefulWidget {
   @override
@@ -16,8 +17,38 @@ class _CambiarApellidosState extends State<CambiarApellidos> {
   String _currentApellido;
   final _formKey = GlobalKey<FormState>();
 
+  FToast fToast;
+
+  Widget _toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.0),
+      color: Colors.green,
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.check_circle, color: Colors.white),
+        SizedBox(
+          width: 12.0,
+        ),
+        Text("Apellidos cambiados", style: TextStyle(fontSize: 14, color: Colors.white),),
+      ],
+    ),
+  );
+
+  _showToast() {
+    fToast.showToast(
+      child: _toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    fToast = FToast(context);
 
     User user = Provider.of<User>(context);
 
@@ -78,6 +109,8 @@ class _CambiarApellidosState extends State<CambiarApellidos> {
                     Container(
                       width: double.infinity,
                       height: 55.0,
+
+                      //cambiar apellidos
                       child: RaisedButton(
                         color: azulFretum,
                         shape: RoundedRectangleBorder(
@@ -85,21 +118,23 @@ class _CambiarApellidosState extends State<CambiarApellidos> {
                         ),
                         child: Text("Guardar cambios", style:  estiloBlanco,),
                         onPressed: () async {
-                          setState(() {
-                            _colorCubo = azulFretum;
-                          });
                           if(_formKey.currentState.validate()){
+                            setState(() {
+                              _colorCubo = azulFretum;
+                            });
                             await DatabaseService(uid: user.uid).updateUserData(
                               snapshot.data.nombre,
                               _currentApellido ?? snapshot.data.apellidos,
                               snapshot.data.telefono,
                               snapshot.data.correo,
                             );
+                            _showToast();
                             Navigator.pushReplacementNamed(context, '/perfil');
                           }
                         },
                       ),
                     ),
+                    SizedBox(height: 25),
                     SpinKitFadingCube(
                       size: 40.0,
                       color: _colorCubo,

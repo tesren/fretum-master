@@ -18,8 +18,37 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
   Set<Marker> markers = Set();
   GoogleMapController  _mapController;
 
+  FToast fToast;
+
+  Widget _toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.0),
+      color: Colors.green,
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.check_circle, color: Colors.white),
+        SizedBox(
+          width: 12.0,
+        ),
+        Text("Cita registrada", style: TextStyle(fontSize: 14, color: Colors.white),),
+      ],
+    ),
+  );
+
+  _showToast() {
+    fToast.showToast(
+      child: _toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    fToast = FToast(context);
 
     _datos = ModalRoute.of(context).settings.arguments;
 
@@ -118,10 +147,14 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
 
             //registrar la cita
             onPressed: () async{
-             // print(_datos);
+               //convierto latlong en algo facil de usar
+               String _latitud = direccionLatLong.latitude.toString();
+               String _longi = direccionLatLong.longitude.toString();
+               String latylong = _latitud+","+_longi;
+
               DocumentReference ref = await db.collection("citas").add({
                 'direccion': '$direccion',
-                'LatLong': '$direccionLatLong',
+                'LatLong': '$latylong',
                 'fecha': '$fecha',
                 'hora': '$hora',
                 'tiempo': '$tiempoEstim',
@@ -136,15 +169,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                 'notas': '$notas'
               });
 
-              Fluttertoast.showToast(
-                  msg: "Cita agregada exitosamente",
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.grey[400],
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
+             _showToast();
               Navigator.pushReplacementNamed(context, "/citas");
             },
           ),
@@ -198,8 +223,8 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                 ),
 
                 //widgets para mostrar direccion
-                Text("Dirección "  , style: estiloNegro ),
-                Text("" + _datos['direccion'].toString(), style:  estiloGris,),
+                Text("Dirección "  , style: estiloNegro ,textAlign: TextAlign.center,),
+                Text("" + _datos['direccion'].toString(), style:  estiloGris, textAlign: TextAlign.center,),
                 SizedBox(height: 5),
 
                 //contenedor de fecha y tiempo
@@ -352,6 +377,8 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                     ),
                   ),
                 ),
+
+                //contenedor de notas
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -366,7 +393,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -37,7 +37,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                         padding: const EdgeInsets.fromLTRB(0.0,0.0,8.0,0.0),
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
-                          backgroundImage: AssetImage("assets/outline_account_circle_black_48pt_3x.png"),
+                          backgroundImage: AssetImage("assets/baseline_account_circle_black_48dp.png"),
                           radius: 55.0,
                         ),
                       ),
@@ -85,7 +85,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
 
                   },
                 ),
-                ListTile(
+               /* ListTile(
                   title: Text("Ingresos",
                       style: estiloNegro),
                   leading: Icon(Icons.attach_money, color: Colors.black),
@@ -94,7 +94,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                     Navigator.pop(context);
                     Navigator.pushReplacementNamed(context, '/ingresos');
                   },
-                ),
+                ),*/
                 ListTile(
                   title: Text("Gastos",
                       style: estiloNegro),

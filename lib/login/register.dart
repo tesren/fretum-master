@@ -4,7 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fretummaster/services/auth.dart';
 import 'package:fretummaster/services/user.dart';
 import 'package:provider/provider.dart';
-import 'package:fretummaster/services/database.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -30,10 +31,39 @@ class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
 
+  FToast fToast;
+
+  Widget _toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.0),
+      color: Colors.green,
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.check_circle, color: Colors.white),
+        SizedBox(
+          width: 12.0,
+        ),
+        Text("Registro exitoso", style: TextStyle(fontSize: 14, color: Colors.white),),
+      ],
+    ),
+  );
+
+  _showToast() {
+    fToast.showToast(
+      child: _toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
     User user = Provider.of<User>(context);
+    fToast = FToast(context);
 
 
     return WillPopScope(
@@ -76,6 +106,7 @@ class _RegisterState extends State<Register> {
                   TextField(
                     controller: _cNombre,
                     keyboardType: TextInputType.text,
+                    maxLength: 35,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.account_circle, color: Colors.grey),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -93,6 +124,7 @@ class _RegisterState extends State<Register> {
                   TextField(
                     controller: _cApellidos,
                     keyboardType: TextInputType.text,
+                    maxLength: 60,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.font_download, color: Colors.grey),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -106,8 +138,22 @@ class _RegisterState extends State<Register> {
                   ),
                   SizedBox(height: 15.0),
 
+                  InternationalPhoneNumberInput(
+                    ignoreBlank: false,
+                    maxLength: 15,
+                    countries: ['MX'],
+                    autoValidate: false,
+                    selectorTextStyle: TextStyle(color: Colors.black),
+                    textFieldController: _cPhone,
+                    inputDecoration: InputDecoration(
+                        prefixIcon: Icon(Icons.local_phone, color: Colors.grey),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        labelText: "Teléfono",
+                    ),
+                  ),
+
                   //telefono
-                  TextField(
+                /*  TextField(
                     controller: _cPhone,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
@@ -120,13 +166,14 @@ class _RegisterState extends State<Register> {
                     },
                     textInputAction: TextInputAction.next,
                     onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-                  ),
+                  ),*/
                   SizedBox(height: 15.0),
 
                   //correo
                   TextField(
                     controller: _cCorreo,
                     keyboardType: TextInputType.emailAddress,
+                    maxLength: 60,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.email, color: Colors.grey),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -144,6 +191,7 @@ class _RegisterState extends State<Register> {
                   TextField(
                     controller: _cContra,
                     keyboardType: TextInputType.text,
+                    maxLength: 30,
                     obscureText: true,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock, color: Colors.grey),
@@ -160,6 +208,7 @@ class _RegisterState extends State<Register> {
 
                   //confirmar contraseña
                   TextField(
+                    maxLength: 30,
                     controller: _cConfirm,
                     keyboardType: TextInputType.text,
                     obscureText: true,
@@ -191,15 +240,16 @@ class _RegisterState extends State<Register> {
                           setState(() {
                             _colorCubo = azulFretum;
                           });
-                          dynamic result = await _auth.registerWithEmailAndPassword(_email, _contra, _cNombre.text.toString(), _cApellidos.text.toString(), int.tryParse(_cPhone.text.trim()));
+                          dynamic result = await _auth.registerWithEmailAndPassword(_email, _contra, _cNombre.text.toString(), _cApellidos.text.toString(), _cPhone.text.toString());
 
                           if(result == null){
                             setState(() {
                               _colorCubo = Colors.transparent;
                             });
-                            _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Hubo un error')));
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Hubo un error, por favor intente mas tarde')));
                           }else{
-                            _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Se registró exitosamente")));
+                            //mostrar Toast personalizado
+                            _showToast();
                             Navigator.pushReplacementNamed(context, '/login');
                           }
 
@@ -214,7 +264,7 @@ class _RegisterState extends State<Register> {
                   SizedBox(height: 20),
                   SpinKitFadingCube(
                     color: _colorCubo,
-                    size: 40,
+                    size: 30,
                   )
 
                 ],
