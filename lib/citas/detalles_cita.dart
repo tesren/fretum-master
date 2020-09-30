@@ -1,11 +1,12 @@
 import 'dart:ffi';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fretummaster/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DetallesCita extends StatefulWidget {
   @override
@@ -19,12 +20,49 @@ class _DetallesCitaState extends State<DetallesCita> {
   Set<Marker> markers = Set();
   GoogleMapController  _mapController;
 
+  void _launchMapsUrl(double lat, double lon) async {
+    final url = 'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  FToast fToast;
+
+  Widget _toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.0),
+      color: Colors.red,
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.delete_forever, color: Colors.white),
+        SizedBox(
+          width: 12.0,
+        ),
+        Text("Cita borrada", style: TextStyle(fontSize: 14, color: Colors.white),),
+      ],
+    ),
+  );
+
+  _showToast() {
+    fToast.showToast(
+      child: _toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
     _datos = ModalRoute.of(context).settings.arguments;
     String id = _datos['id'];
-
+    fToast = FToast(context);
 
     return WillPopScope(
       onWillPop: ()async{
@@ -306,12 +344,67 @@ class _DetallesCitaState extends State<DetallesCita> {
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: <Widget>[
-                              Expanded(child: Text("Notas", style: estiloAzul)),
-                              Text(snapshot.data['notas'].toString(), style: estiloNegro),
+                              Expanded(child: Text("Notas", style: estiloAzul) ),
+                              Flexible(child: Text(snapshot.data['notas'].toString(), style: estiloNegro, maxLines: 3, overflow: TextOverflow.ellipsis)),
                             ],
                           ),
                         ),
                       ),
+                      Container(
+                        width: double.infinity,
+                        height: 45,
+                        margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
+                        child: RaisedButton(
+                          onPressed: (){
+                            _launchMapsUrl(latitud, longitud);
+                          },
+                          color: azulFretum,
+                          elevation: 5,
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(child: Text("Abrir ubicación en Google Maps", style: estiloBlanco, overflow: TextOverflow.ellipsis, maxLines: 1,)),
+                              Icon(Icons.arrow_forward_ios, color: Colors.white,)
+                            ],
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)
+                          ),
+                        ),
+                      ),
+
+                      //Boton para borrar citas
+                      FlatButton(
+                        onPressed: (){
+                          // borrar cita
+                          showDialog(context: context,
+                              builder: (_dialogContext) => AlertDialog(
+                                title: Row(
+                                  children: <Widget>[
+                                    Icon(Icons.delete_forever),
+                                    Text("  Eliminar cita definitivamente", style: estiloNegro,),
+                                  ],
+                                ),
+                                content: Text("¿Estás seguro de eliminar esta cita? \n Esta acción es irreversible", style: estiloGris,),
+                                actions: <Widget>[
+                                  FlatButton(child: Text("Cancelar"),
+                                    onPressed: (){
+                                      Navigator.pop(_dialogContext);
+                                    },),
+                                  FlatButton(child: Text("Si"),
+                                    onPressed: ()async{
+                                      await db.collection("citas").document(id).delete();
+                                      Navigator.pop(_dialogContext);
+                                      _showToast();
+                                      Navigator.pushReplacementNamed(context, '/citas');
+                                    },)
+                                ],
+                                elevation: 20.0,
+                                backgroundColor: Colors.grey[100],
+                              ),
+                              barrierDismissible: true);
+                        },
+                        child: Text("Eliminar cita", style: TextStyle(color: Colors.red, fontSize: 16),),
+                      )
                     ],
                   ),
                 ),

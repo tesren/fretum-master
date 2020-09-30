@@ -83,7 +83,7 @@ class _ConfigState extends State<Config> {
                                 padding: const EdgeInsets.fromLTRB(5.0,0.0,8.0,0.0),
                                 child: CircleAvatar(
                                   backgroundColor: Colors.white,
-                                  backgroundImage: AssetImage("assets/outline_account_circle_black_48pt_3x.png"),
+                                  backgroundImage: AssetImage("assets/baseline_account_circle_black_48dp.png"),
                                   radius: 45.0,
                                 ),
                               ),
@@ -176,7 +176,8 @@ class _ConfigState extends State<Config> {
                                   FlatButton(child: Text("Si"),
                                     onPressed: ()async{
                                       await _auth.signOut();
-                                      Navigator.pushReplacementNamed(context, '/login');
+                                      Navigator.pop(_);
+                                      Navigator.pushReplacementNamed(_, '/login');
                                     },)
                                 ],
                                 elevation: 20.0,

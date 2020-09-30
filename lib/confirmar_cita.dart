@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -152,6 +153,15 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                String _longi = direccionLatLong.longitude.toString();
                String latylong = _latitud+","+_longi;
 
+               //convierto fechas en timestamp para firebase
+               String fechaSlash = fecha.replaceAll("-", "/");
+               DateTime dateTime = DateTime.parse(fechaSlash);
+               print(dateTime);
+               String formatedDate = DateFormat("dd/MM/yyyy hh:mm:sssss").format(dateTime);
+               dateTime = DateTime.parse(formatedDate);
+               print(dateTime);
+
+
               DocumentReference ref = await db.collection("citas").add({
                 'direccion': '$direccion',
                 'LatLong': '$latylong',
@@ -166,7 +176,8 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                 'motos': '$motos',
                 'total': '$total',
                 'metodo': 'Efectivo',
-                'notas': '$notas'
+                'notas': '$notas',
+                'timestamp': DateTime.now().toUtc(),
               });
 
              _showToast();
@@ -389,7 +400,7 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                     child: Row(
                       children: <Widget>[
                         Expanded(child: Text("Notas", style: estiloAzul)),
-                        Text(notas, style: estiloNegro),
+                        Flexible(child: Text(notas, style: estiloNegro,  maxLines: 3, overflow: TextOverflow.ellipsis)),
                       ],
                     ),
                   ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fretummaster/colors.dart';
+import 'package:fretummaster/main.dart';
 import 'package:fretummaster/services/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
 
@@ -13,18 +15,15 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  SharedPreferences localStorage;
   Map data = {};
   bool checkBoxValue = true;
   Color _colorCubo = Colors.transparent;
-  String email = '';
-  String contra = '';
   final AuthService _auth = AuthService();
   final cContra = TextEditingController();
   final cEmail = TextEditingController();
 
   FToast fToast;
-
   Widget toast = Container(
     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
     decoration: BoxDecoration(
@@ -41,9 +40,26 @@ class _LoginState extends State<Login> {
     );
   }
 
+
+
   @override
-  void initState() {
+  void initState(){
     super.initState();
+    _getLocalStorage();
+  }
+
+  Future _getLocalStorage() async{
+    localStorage = await SharedPreferences.getInstance();
+    final shCorreo = localStorage.getString('correo');
+    final shContra = localStorage.getString('contra');
+    cEmail.text = shCorreo;
+    cContra.text = shContra;
+  }
+
+  save() async{
+    await _LoginState()._getLocalStorage();
+    localStorage.setString('correo', cEmail.text.toString());
+    localStorage.setString('contra', cContra.text.toString());
   }
 
   @override
@@ -56,6 +72,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        leading: null,
         backgroundColor: azulFretum,
         centerTitle: true,
         title: Text("Fretum master",
@@ -90,9 +107,6 @@ class _LoginState extends State<Login> {
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           labelText: "Correo electrónico"
                         ),
-                        onChanged: (val) {
-                          setState(() => email = val);
-                        },
                         textInputAction: TextInputAction.next,
                         onSubmitted: (_) => FocusScope.of(context).nextFocus(),
                       ),
@@ -107,14 +121,12 @@ class _LoginState extends State<Login> {
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           labelText: "Contraseña",
                         ),
-                        onChanged: (val) {
-                          setState(() => contra = val);
-                        },
                       ),
                       Row(
                         children: <Widget>[
                           Checkbox(
                             value: checkBoxValue,
+                            activeColor: azulFretum,
                             onChanged: (bool value){
                               setState(() {
                                 checkBoxValue = value;
@@ -139,7 +151,7 @@ class _LoginState extends State<Login> {
                               setState(() {
                                 _colorCubo = azulFretum;
                               });
-                              dynamic result = await _auth.signInWithEmailAndPassword(email, contra);
+                              dynamic result = await _auth.signInWithEmailAndPassword(cEmail.text.toString(), cContra.text.toString());
 
                               if(result == null){
                                 setState(() {
@@ -147,7 +159,11 @@ class _LoginState extends State<Login> {
                                 });
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Correo o contraseña incorrecto')));
                               }else{
-
+                                if (checkBoxValue == true){
+                                  save();
+                                }else{
+                                  localStorage.clear();
+                                }
                                 //mostrar Toast personalizado
                                _showToast();
                                 Navigator.pushReplacementNamed(context, '/citas');

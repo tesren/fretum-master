@@ -113,7 +113,8 @@ class _AgregarGastoState extends State<AgregarGasto> {
                       'lugar': '$_lugar',
                       'fecha': '$convertedDate',
                       'monto': '$_monto',
-                      'metodo': '$_currentMetod'
+                      'metodo': '$_currentMetod',
+                      'timestamp': DateTime.now().toUtc(),
                     });
                     _showToast();
                     Navigator.pushReplacementNamed(context, '/gastos');

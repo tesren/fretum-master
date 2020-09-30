@@ -35,6 +35,7 @@ import 'login/register.dart';
         return StreamProvider<User>.value(
           value: AuthService().user,
           child: MaterialApp(
+            debugShowCheckedModeBanner: false,
             initialRoute: '/',
             routes: {
               '/': (context) => Loading(),

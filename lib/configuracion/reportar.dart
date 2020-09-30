@@ -55,6 +55,8 @@ class _ReportarState extends State<Reportar> {
                 children: <Widget>[
                   Text("Por favor describe detalladamente el problema", style: estiloGris,),
                   SizedBox(height: 10),
+
+                  //campo de reportar problema
                   TextField(
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(

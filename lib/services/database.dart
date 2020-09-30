@@ -11,8 +11,8 @@ class DatabaseService {
 
   //referencias
   final CollectionReference usersCollection = Firestore.instance.collection("users");
-  final CollectionReference citasCollection = Firestore.instance.collection("citas");
-  final CollectionReference gastosCollection = Firestore.instance.collection("gastos");
+  final Query citasCollection = Firestore.instance.collection("citas").orderBy("timestamp", descending: true);
+  final Query gastosCollection = Firestore.instance.collection("gastos").orderBy("timestamp", descending: true);
 
 //no usado CREO
   Future updateUserData(String nombre, String apellidos, String telefono, String correo) async {
@@ -61,6 +61,7 @@ class DatabaseService {
         fecha: doc.data['fecha'] ?? '',
         monto: doc.data['monto'] ?? '',
         metodo: doc.data['metodo'] ?? '',
+        timeStamp: doc.data['timestamp'].toDate() ?? '',
       );
     }).toList();
   }
