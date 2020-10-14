@@ -113,27 +113,9 @@ class _DatosPerfilState extends State<DatosPerfil> {
                       ),
                       SizedBox(height: 15.0),
                       Text("Teléfono", style: estiloGris,),
-                      Container(
-                        width: 320.0, height: 50,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(10.0)
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(1.0, 0.0, 5.0, 0.0),
-                              child: Icon(Icons.local_phone, color: Colors.grey, size: 35.0,),
-                            ),
-                            Expanded(child: Text("${userData.telefono}", style: estiloNegro, overflow: TextOverflow.ellipsis, maxLines: 1,)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Text("Contraseña", style: estiloGris,),
                       InkWell(
                         onTap: (){
-                          Navigator.pushReplacementNamed(contexto, '/cambiarContra');
+                          Navigator.pushReplacementNamed(contexto, '/cambiarTelefono');
                         },
                         child: Container(
                           width: 320.0, height: 50,
@@ -145,12 +127,30 @@ class _DatosPerfilState extends State<DatosPerfil> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(1.0, 0.0, 5.0, 0.0),
-                                child: Icon(Icons.lock, color: Colors.grey, size: 35.0,),
+                                child: Icon(Icons.local_phone, color: Colors.grey, size: 35.0,),
                               ),
-                              Expanded(child: Text("************", style: estiloNegro, overflow: TextOverflow.ellipsis, maxLines: 1,)),
-                              Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20.0,),
+                              Expanded(child: Text("${userData.telefono}", style: estiloNegro, overflow: TextOverflow.ellipsis, maxLines: 1,)),
+                              Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20.0,)
                             ],
                           ),
+                        ),
+                      ),
+                      SizedBox(height: 15.0),
+                      Text("Contraseña", style: estiloGris,),
+                      Container(
+                        width: 320.0, height: 50,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(1.0, 0.0, 5.0, 0.0),
+                              child: Icon(Icons.lock, color: Colors.grey, size: 35.0,),
+                            ),
+                            Expanded(child: Text("************", style: estiloNegro, overflow: TextOverflow.ellipsis, maxLines: 1,)),
+                          ],
                         ),
                       ),
                       SizedBox(height: 15.0),

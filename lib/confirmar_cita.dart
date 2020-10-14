@@ -153,13 +153,13 @@ class _ConfirmarCitaState extends State<ConfirmarCita> {
                String _longi = direccionLatLong.longitude.toString();
                String latylong = _latitud+","+_longi;
 
-               //convierto fechas en timestamp para firebase
+              /* //convierto fechas en timestamp para firebase
                String fechaSlash = fecha.replaceAll("-", "/");
                DateTime dateTime = DateTime.parse(fechaSlash);
                print(dateTime);
                String formatedDate = DateFormat("dd/MM/yyyy hh:mm:sssss").format(dateTime);
                dateTime = DateTime.parse(formatedDate);
-               print(dateTime);
+               print(dateTime);*/
 
 
               DocumentReference ref = await db.collection("citas").add({

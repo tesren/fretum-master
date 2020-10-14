@@ -76,7 +76,7 @@ class _DetallesCitaState extends State<DetallesCita> {
           if(snapshot.hasData){
 
             //convierto strings a LATLONG
-            String direccionLatLong = snapshot.data['LatLong'] ;
+            String direccionLatLong = snapshot.data['LatLong'] ?? '0,0' ;
             List<String> LatLong = direccionLatLong.split(",");
             double latitud = double.tryParse(LatLong[0]);
             double longitud = double.tryParse(LatLong[1]);

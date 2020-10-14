@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fretummaster/citas/detalles_cita.dart';
 import 'package:fretummaster/gastos/agregar_gasto.dart';
-import 'package:fretummaster/perfil/cambiar_contra.dart';
+import 'package:fretummaster/perfil/cambiar_telefono.dart';
 import 'package:fretummaster/citas/citas.dart';
 import 'package:fretummaster/services/auth.dart';
 import 'package:fretummaster/citas/citas_model.dart';
@@ -52,7 +52,7 @@ import 'login/register.dart';
               '/cambiarNombre': (context) => CambiarNombre(),
 
               '/cambiarApellidos': (context) => CambiarApellidos(),
-              '/cambiarContra': (context) => CambiarContra(),
+              '/cambiarTelefono': (context) => CambiarTelefono(),
               '/reportar': (context) => Reportar(),
               '/terminos': (context) => Terminos(),
               '/agregarCarros': (context) => AgregarCarros(),

@@ -55,4 +55,9 @@ class AuthService {
     }
   }
 
+  //cambiar contraseña
+  Future sendPassResetEmail(String correo) async{
+    return _auth.sendPasswordResetEmail(email: correo);
+  }
+
 }
